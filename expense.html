@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense Calculator</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f3dfb8;
+  margin: 30px;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+header h2 {
+  margin: 0;
+}
+header input {
+  padding: 6px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+.form {
+  background: burlywood;
+  padding: 20px;
+  border-radius: 10px;
+  width: 350px;
+  margin: auto;
+}
+.form label {
+  display: block;
+  margin-top: 10px;
+}
+.form input {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+button {
+  padding: 6px 15px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+#saveBtn { background: purple; }
+#clearBtn { background: crimson; }
+table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+  background: #ffe5c6;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+th { background: burlywood; }
+</style>
+</head>
+<body>
+
+<header>
+  <h2>💰 Expense Calculator</h2>
+  <div>
+    <input type="text" id="month" placeholder="Month">
+    <input type="text" id="year" placeholder="Year">
+  </div>
+</header>
+
+<div class="form">
+  <label>Expense Name:</label>
+  <input type="text" id="name">
+
+  <label>Amount (₹):</label>
+  <input type="number" id="amount">
+
+  <label>Category:</label>
+  <input type="text" id="category">
+
+  <label>Date:</label>
+  <input type="text" id="date" placeholder="DD-MM-YYYY">
+
+  <div class="buttons">
+    <button id="saveBtn">Save</button>
+    <button id="clearBtn">Clear</button>
+  </div>
+</div>
+
+<table id="table">
+  <thead>
+    <tr><th>Name</th><th>Amount</th><th>Category</th><th>Date</th></tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+let data = JSON.parse(localStorage.getItem("expenses")) || [];
+let tbody = document.querySelector("tbody");
+
+function showData() {
+  tbody.innerHTML = data.map(e => 
+    `<tr><td>${e.name}</td><td>₹${e.amount}</td><td>${e.category}</td><td>${e.date}</td></tr>`
+  ).join("");
+}
+
+document.getElementById("saveBtn").onclick = () => {
+  let name = nameInput.value.trim();
+  let amount = amountInput.value.trim();
+  let category = categoryInput.value.trim();
+  let date = dateInput.value.trim();
+  if(!name || !amount || !category || !date) return alert("Fill all fields!");
+  data.push({name, amount, category, date});
+  localStorage.setItem("expenses", JSON.stringify(data));
+  showData();
+  document.querySelectorAll("input").forEach(i => i.value = "");
+};
+
+document.getElementById("clearBtn").onclick = () => {
+  document.querySelectorAll("input").forEach(i => i.value = "");
+};
+
+const nameInput = document.getElementById("name");
+const amountInput = document.getElementById("amount");
+const categoryInput = document.getElementById("category");
+const dateInput = document.getElementById("date");
+
+showData();
+</script>
+
+</body>
+</html>
